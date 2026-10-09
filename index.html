@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d18">
+<title>VERB MASTER — English Verb Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-orb orb1"></div><div class="bg-orb orb2"></div>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">V</span><div><b>VERB MASTER</b><small>English Verb Learning</small></div></div>
+  <div class="top-actions"><button id="themeBtn" class="icon-btn" title="Toggle theme">☀️</button></div>
+</header>
+<main>
+<section id="home" class="page active">
+  <div class="hero">
+    <div class="hero-copy"><span class="eyebrow">SMART • SIMPLE • POWERFUL</span><h1>Master English<br><span>Verbs.</span></h1><p>Learn V1, V2, V3 and Sinhala meanings with an interactive study system.</p>
+    <button class="primary" onclick="showPage('verbs')">Start Learning <span>→</span></button></div>
+    <div class="hero-stat"><div class="ring" id="heroRing"><strong id="heroProgress">0%</strong><small>Progress</small></div><p><b id="heroTotal">200</b> verbs ready to learn</p></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><span>📚</span><div><small>Total Verbs</small><b id="totalStat">200</b></div></div>
+    <div class="stat-card"><span>✅</span><div><small>Learned</small><b id="learnedStat">0</b></div></div>
+    <div class="stat-card"><span>⭐</span><div><small>Favorites</small><b id="favStat">0</b></div></div>
+    <div class="stat-card"><span>🎯</span><div><small>Practice Score</small><b id="scoreStat">0</b></div></div>
+  </div>
+  <div class="section-title"><div><span class="eyebrow">EXPLORE</span><h2>Choose your mode</h2></div></div>
+  <div class="mode-grid">
+    <button class="mode-card" onclick="showPage('verbs')"><span>📚</span><h3>Verb List</h3><p>Base verbs + hidden Sinhala meanings.</p><i>→</i></button>
+    <button class="mode-card" onclick="showPage('forms')"><span>📝</span><h3>Verb Forms</h3><p>Practice V1 → V2 → V3.</p><i>→</i></button>
+    <button class="mode-card" onclick="showPage('practice')"><span>🎯</span><h3>Practice</h3><p>Test yourself with quick questions.</p><i>→</i></button>
+    <button class="mode-card" onclick="showPage('progress')"><span>📊</span><h3>Progress</h3><p>See your learning journey.</p><i>→</i></button>
+  </div>
+</section>
+
+<section id="verbs" class="page">
+  <div class="page-head"><div><span class="eyebrow">VOCABULARY</span><h2>Verb List</h2><p>Reveal Sinhala meanings when you need them.</p></div><button class="ghost" onclick="randomVerb()">🎲 Random</button></div>
+  <div class="toolbar"><div class="search"><span>⌕</span><input id="verbSearch" placeholder="Search verb, meaning..." oninput="renderVerbs()"><button onclick="clearSearch('verbSearch')">×</button></div><div class="tool-buttons"><button class="ghost" onclick="showAllMeaning(true)">Show All</button><button class="ghost" onclick="showAllMeaning(false)">Hide All</button></div></div>
+  <div class="study-filters" id="studyFilters"><button class="study-filter active" data-filter="all" onclick="setStudyFilter('all')">All Verbs</button><button class="study-filter" data-filter="learned" onclick="setStudyFilter('learned')">✓ Learned</button><button class="study-filter" data-filter="unlearned" onclick="setStudyFilter('unlearned')">○ Not Learned</button><span id="studyCount" class="study-count"></span></div>
+  <div class="letters" id="letters"></div>
+  <div id="verbGrid" class="verb-grid"></div>
+</section>
+
+<section id="forms" class="page">
+  <div class="page-head"><div><span class="eyebrow">MEMORY TRAINING</span><h2>Verb Forms</h2><p>V2 and V3 are hidden until you reveal them.</p></div></div>
+  <div class="toolbar"><div class="search"><span>⌕</span><input id="formSearch" placeholder="Search verbs..." oninput="renderForms()"><button onclick="clearSearch('formSearch')">×</button></div><div class="tool-buttons"><button class="ghost" onclick="showAllForms('v2',true)">Show V2</button><button class="ghost" onclick="showAllForms('v2',false)">Hide V2</button><button class="ghost" onclick="showAllForms('v3',true)">Show V3</button><button class="ghost" onclick="showAllForms('v3',false)">Hide V3</button></div></div>
+  <div id="formGrid" class="form-grid"></div>
+</section>
+
+<section id="practice" class="page">
+  <div class="practice-wrap">
+    <div class="page-head"><div><span class="eyebrow">CHALLENGE YOURSELF</span><h2>Practice Mode</h2><p>Choose the correct verb form.</p></div></div>
+    <div class="practice-options">
+      <div class="practice-option-group"><label>Practice set</label><div class="practice-modes"><button class="practice-mode active" data-mode="v2" onclick="setPracticeMode('v2')">V1 → V2</button><button class="practice-mode" data-mode="v3" onclick="setPracticeMode('v3')">V1 → V3</button><button class="practice-mode" data-mode="meaning" onclick="setPracticeMode('meaning')">Meaning → V1</button></div></div>
+      <div class="practice-option-group"><label>Words to practice</label><select id="practiceScope" onchange="setPracticeScope(this.value)"><option value="all">All verbs</option><option value="unlearned">Not learned yet</option><option value="learned">Learned verbs</option></select><small id="practicePoolCount"></small></div>
+    </div>
+    <div class="practice-card">
+      <div class="practice-top"><span id="qNum">Question 1 / 10</span><span id="qScore">Score: 0</span></div>
+      <div class="progress"><i id="qProgress"></i></div>
+      <div class="question"><small id="qType">Choose the correct Past Tense (V2)</small><h1 id="qWord">go</h1><p id="qMeaning" class="practice-meaning"></p></div>
+      <div id="answers" class="answers"></div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+      <button id="nextBtn" class="primary next" onclick="nextQuestion()" disabled>Next Question →</button>
+      <button class="ghost practice-restart" onclick="restartPractice()">↻ Restart practice</button>
+    </div>
+  </div>
+</section>
+
+<section id="progress" class="page">
+  <div class="page-head"><div><span class="eyebrow">YOUR JOURNEY</span><h2>Progress</h2><p>Your study data is saved automatically on this device.</p></div></div>
+  <div class="progress-main">
+    <div class="big-progress"><div class="ring large" id="progressRing"><strong id="progressPercent">0%</strong><small>Learned</small></div><div><h3 id="learnedTitle">0 of 200</h3><p>verbs marked as learned</p></div></div>
+    <div class="progress-bars">
+      <div><span>Learning progress <b id="learnedPct">0%</b></span><div class="bar"><i id="learnedBar"></i></div></div>
+      <div><span>Practice accuracy <b id="accuracyPct">0%</b></span><div class="bar"><i id="accuracyBar"></i></div></div>
+    </div>
+  </div>
+  <div class="stats-grid bottom-stats">
+    <div class="stat-card"><span>🎯</span><div><small>Questions</small><b id="questionsStat">0</b></div></div>
+    <div class="stat-card"><span>✓</span><div><small>Correct</small><b id="correctStat">0</b></div></div>
+    <div class="stat-card"><span>✕</span><div><small>Wrong</small><b id="wrongStat">0</b></div></div>
+    <div class="stat-card"><span>⭐</span><div><small>Favorites</small><b id="favStat2">0</b></div></div>
+  </div>
+  <button class="danger ghost" onclick="resetProgress()">Reset Progress</button>
+</section>
+</main>
+
+<nav class="bottom-nav">
+  <button data-page="home" onclick="showPage('home')">⌂<small>Home</small></button>
+  <button data-page="verbs" onclick="showPage('verbs')">▤<small>Verbs</small></button>
+  <button data-page="forms" onclick="showPage('forms')">◈<small>Forms</small></button>
+  <button data-page="practice" onclick="showPage('practice')">◎<small>Practice</small></button>
+  <button data-page="progress" onclick="showPage('progress')">◒<small>Progress</small></button>
+</nav>
+<div id="toast"></div>
+<script src="verbs.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
